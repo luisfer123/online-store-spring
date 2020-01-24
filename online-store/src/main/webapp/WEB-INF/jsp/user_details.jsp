@@ -6,14 +6,14 @@
 
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<%@ include file="./layers/scripts.jsp" %>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<%@ include file="./layers/scripts.jsp" %>
 </head>
 <body>
 
 <%@ include file="./layers/navbar.jsp" %>
 
-	Index works!
+	User Details Service.
 </body>
 </html>
