@@ -2,6 +2,7 @@ package com.online.store.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,14 +26,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http
+		.authorizeRequests()
 			.antMatchers("/resources/**").permitAll()
+			.antMatchers(HttpMethod.POST, "/products/add").authenticated()
 			.antMatchers("/**").authenticated()
 			.and()
 		.formLogin()
 			.loginPage("/login")
 			.permitAll()
 			.failureUrl("/login?error=true")
+			.defaultSuccessUrl("/home", true)
 			.and()
 		.logout()
 			.logoutUrl("/logout")
@@ -56,4 +60,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }

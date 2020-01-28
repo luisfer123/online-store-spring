@@ -16,8 +16,13 @@
 
 <%@ include file="./layers/navbar.jsp" %>
 
-<div class="container">
+<div class="container mt-3">
 	<form method="post" action="<c:url value='/login' />">
+		<c:if test="${param.error eq true }">
+			<div class="alert alert-danger" role="alert">
+  				Username or Password are incorrect! Please try again.
+			</div>
+		</c:if>
 		<div class="form-group">
 			<label for="username">Username:</label> 
 			<input type="text" name="username" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email">
