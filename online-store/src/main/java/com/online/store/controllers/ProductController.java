@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,8 +28,17 @@ public class ProductController {
 	private ProductService productService;
 	
 	@RequestMapping("")
-	public ModelAndView showProducts(ModelMap model) {
+	public ModelAndView showProducts(
+			@RequestParam(required = false, value = "page_number") Integer requestedPage,
+			ModelMap model) {
 		
+		int pageNumber = requestedPage != null ? requestedPage : 0;
+		Page<Product> productsPage = productService.findAllPaginated(pageNumber);
+		
+		model.addAttribute("products", productsPage.getContent());
+		model.addAttribute("numberOfPages", productsPage.getTotalPages());
+		model.addAttribute("currentPage", productsPage.getNumber());
+				
 		return new ModelAndView("products", model);
 	}
 	
@@ -42,10 +52,17 @@ public class ProductController {
 	public ModelAndView newProduct(
 			@ModelAttribute("product") Product product,
 			@RequestParam(value = "image", required = false) CommonsMultipartFile[] imagesUpload, // more than one image can be uploaded at a time.
+			@RequestParam(value = "main_image") CommonsMultipartFile mainImage,
 			ModelMap model) {
-				
-		Set<ProductImage> images = new HashSet<>();
 		
+		// Add main image which goes in the products table. Additional images 
+		// are stored in the product_images table.
+		if(mainImage != null && !mainImage.isEmpty()) {
+			product.setMainImage(mainImage.getBytes());
+		}
+		
+		// Add and save additional images in the product_images table.
+		Set<ProductImage> images = new HashSet<>();
 		if(imagesUpload != null && imagesUpload.length > 0) {
 			for(CommonsMultipartFile imageUpload: imagesUpload) {
 				// If no image was chosen, jet imagesUpload will contain an empty string.
@@ -73,14 +90,14 @@ public class ProductController {
 			ModelMap model) {
 		
 		Product product = productService.findProductByIdWithImages(productId);
-		model.addAttribute("product", product);
-				
+		
 		String[] images = product.getImages().stream()
 				.map(productImage -> {
 					byte[] imageByte = productImage.getImage();
 					return Base64.getEncoder().encodeToString(imageByte);
 				}).toArray(String[]::new);
 		
+		model.addAttribute("product", product);
 		model.addAttribute("productImages", images);
 		
 		return new ModelAndView("/product_details", model);

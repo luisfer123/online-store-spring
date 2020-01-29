@@ -4,6 +4,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,15 @@ public class ProductService {
 		product.setImages(images);
 		
 		return product;
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<Product> findAllPaginated(int requestedPage) {
+		
+		PageRequest pageRequest =
+				PageRequest.of(requestedPage, 1, Sort.by("name").descending());
+		
+		return productRepository.findAll(pageRequest);
 	}
 
 }

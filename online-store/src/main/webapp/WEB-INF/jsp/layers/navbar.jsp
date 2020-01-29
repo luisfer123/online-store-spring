@@ -30,9 +30,11 @@
 				        </div>
 			        </li>
 		        </sec:authorize>
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-				</li>
+		        <sec:authorize access="isAuthenticated()">
+					<li class="nav-item active">
+						<a class="nav-link" href="<c:url value='/products?page_number=0' />">Products<span class="sr-only">(current)</span></a>
+					</li>
+				</sec:authorize>
 				<li class="nav-item">
 					<a class="nav-link" href="#">Link</a>
 				</li>

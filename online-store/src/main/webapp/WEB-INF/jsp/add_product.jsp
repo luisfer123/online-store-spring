@@ -28,8 +28,12 @@
 				<input type="number" name="price" class="form-control" id="price" placeholder="Price">
 			</div>
 			<div class="form-group">
-				<label for="image" class="form-group">Upload an Image</label>
-				<input type="file" id="image" name="image" class="form-control" />
+				<label for="description">Product description:</label> 
+				<input type="text" name="description" class="form-control" id="description" placeholder="description">
+			</div>
+			<div class="form-group">
+				<label for="main_image" class="form-group">Upload an Image</label>
+				<input type="file" id="main_image" name="main_image" class="form-control" />
 			</div>
 			
 			<sec:csrfInput/>
