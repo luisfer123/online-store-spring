@@ -27,23 +27,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-		.authorizeRequests()
-			.antMatchers("/resources/**").permitAll()
-			.antMatchers(HttpMethod.POST, "/products/add").authenticated()
-			.antMatchers("/**").authenticated()
-			.and()
-		.formLogin()
-			.loginPage("/login")
-			.permitAll()
-			.failureUrl("/login?error=true")
-			.defaultSuccessUrl("/home", true)
-			.and()
-		.logout()
-			.logoutUrl("/logout")
-			.logoutSuccessUrl("/")
-			.invalidateHttpSession(true)
-			.clearAuthentication(true)
-			.deleteCookies("JSESSIONID", "JWT");
+			.authorizeRequests()
+				.antMatchers("/resources/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/products/add").authenticated()
+				.antMatchers("/**").authenticated()
+				.and()
+			.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.failureUrl("/login?error=true")
+				.defaultSuccessUrl("/home", true)
+				.and()
+			.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/")
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.deleteCookies("JSESSIONID", "JWT");
 	}
 
 	@Override

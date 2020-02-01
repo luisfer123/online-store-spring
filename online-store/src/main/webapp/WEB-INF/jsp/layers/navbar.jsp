@@ -22,11 +22,9 @@
 	          				Administer
 	        			</a>
 				        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				            <a class="dropdown-item" href="#">Users</a>
-				            <a class="dropdown-item" href="#">Products</a>
+				            <a class="dropdown-item" href="<c:url value='/users' />">Users</a>
+				            <a class="dropdown-item" href="<c:url value='/products' />">Products</a>
 				            <a class="dropdown-item" href="<c:url value='/products/add' />">Add New Product</a>
-				            <div class="dropdown-divider"></div>
-				            <a class="dropdown-item" href="#">Something else here</a>
 				        </div>
 			        </li>
 		        </sec:authorize>
@@ -36,7 +34,7 @@
 					</li>
 				</sec:authorize>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Link</a>
+					<a class="nav-link" href="#">My profile</a>
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">

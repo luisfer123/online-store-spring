@@ -35,6 +35,9 @@ public class ProductController {
 		int pageNumber = requestedPage != null ? requestedPage : 0;
 		Page<Product> productsPage = productService.findAllPaginated(pageNumber);
 		
+		if(!productsPage.hasContent())
+			return new ModelAndView("redirect:/products/add?has_products=false");
+				
 		model.addAttribute("products", productsPage.getContent());
 		model.addAttribute("numberOfPages", productsPage.getTotalPages());
 		model.addAttribute("currentPage", productsPage.getNumber());
@@ -81,7 +84,8 @@ public class ProductController {
 		
 		productService.save(product);
 		
-		return new ModelAndView("/add_product", model);
+		return new ModelAndView(
+				"redirect:/products/"+product.getId()+"?product_added=true", model);
 	}
 	
 	@RequestMapping(value = "/{productId}")
@@ -90,7 +94,7 @@ public class ProductController {
 			ModelMap model) {
 		
 		Product product = productService.findProductByIdWithImages(productId);
-		
+				
 		String[] images = product.getImages().stream()
 				.map(productImage -> {
 					byte[] imageByte = productImage.getImage();
@@ -99,6 +103,8 @@ public class ProductController {
 		
 		model.addAttribute("product", product);
 		model.addAttribute("productImages", images);
+		model.addAttribute("mainImage", 
+				Base64.getEncoder().encodeToString(product.getMainImage()));
 		
 		return new ModelAndView("/product_details", model);
 	}

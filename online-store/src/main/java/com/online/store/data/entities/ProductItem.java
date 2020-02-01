@@ -4,12 +4,16 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.online.store.data.enums.ProductItemStatus;
 
 @Entity
 @Table(name = "Product_items")
@@ -26,7 +30,8 @@ public class ProductItem {
 	@Column(name = "location")
 	private String location;
 	
-	@Column(name = "condition")
-	private String Condition;
+	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	private ProductItemStatus status;
 	
 }
