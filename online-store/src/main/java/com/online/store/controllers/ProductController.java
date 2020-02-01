@@ -18,14 +18,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.online.store.data.entities.Product;
 import com.online.store.data.entities.ProductImage;
-import com.online.store.services.ProductService;
+import com.online.store.services.interfaces.IProductService;
 
 @Controller
 @RequestMapping(value = "/products")
 public class ProductController {
 	
 	@Autowired
-	private ProductService productService;
+	private IProductService productService;
 	
 	@RequestMapping("")
 	public ModelAndView showProducts(

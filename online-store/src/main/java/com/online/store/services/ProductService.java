@@ -14,10 +14,11 @@ import com.online.store.data.entities.Product;
 import com.online.store.data.entities.ProductImage;
 import com.online.store.repositories.ProductImageRepository;
 import com.online.store.repositories.ProductRepository;
+import com.online.store.services.interfaces.IProductService;
 
 @Service
 @Transactional
-public class ProductService {
+public class ProductService implements IProductService {
 	
 	@Autowired
 	private ProductRepository productRepository;
@@ -25,10 +26,13 @@ public class ProductService {
 	@Autowired
 	private ProductImageRepository productImageRepository;
 
+	@Override
+	@Transactional(readOnly = false)
 	public void save(Product product) {
 		productRepository.save(product);
 	}
 	
+	@Override
 	@Transactional(readOnly = true)
 	public Product findProductByIdWithImages(Long productId) {
 		Optional<Product> optional = productRepository.findById(productId);
@@ -43,6 +47,7 @@ public class ProductService {
 		return product;
 	}
 	
+	@Override
 	@Transactional(readOnly = true)
 	public Page<Product> findAllPaginated(int requestedPage) {
 		

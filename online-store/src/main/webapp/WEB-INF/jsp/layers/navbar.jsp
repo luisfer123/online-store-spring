@@ -33,9 +33,16 @@
 						<a class="nav-link" href="<c:url value='/products?page_number=0' />">Products<span class="sr-only">(current)</span></a>
 					</li>
 				</sec:authorize>
-				<li class="nav-item">
-					<a class="nav-link" href="#">My profile</a>
-				</li>
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item active">
+						<a class="nav-link" href="<c:url value='#' />">My profile</a>
+					</li>
+				</sec:authorize>
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item active">
+						<a class="nav-link" href="<c:url value='#' />">Shopping cart</a>
+					</li>
+				</sec:authorize>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<sec:authorize access="isAuthenticated()">
@@ -49,6 +56,9 @@
 				<sec:authorize access="!isAuthenticated()">
 					<li class="nav-item">
 						<a class="nav-link" href="<c:url value='/login' />">Login</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link">Register</a>
 					</li>
 				</sec:authorize>
 			</ul>

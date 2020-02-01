@@ -19,6 +19,12 @@
 
 	<div class="container">
 	
+		<c:if test="${param.user_deleted eq true }">
+			<div class="alert alert-success mt-3" role="alert">
+				User deleted successfully.
+			</div>
+		</c:if>
+	
 		<h3 class="mt-3 mb-3">List of users:</h3>
 
 		<table class="table">
@@ -42,7 +48,7 @@
 						<td>${user.email }</td>
 						<td>${user.firstName }</td>
 						<td>${user.lastName }</td>
-						<td><a href="#" class="btn btn-danger">Delete</a></td>
+						<td><a href="/users/delete?user_id=${user.id }" class="btn btn-danger">Delete</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>

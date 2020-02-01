@@ -12,11 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.online.store.data.entities.Authority;
 import com.online.store.data.entities.User;
+import com.online.store.exceptions.UserNotFoundException;
 import com.online.store.repositories.AuthorityRepository;
 import com.online.store.repositories.UserRepository;
+import com.online.store.services.interfaces.IUserService;
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -24,6 +26,7 @@ public class UserService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 	
+	@Override
 	@Transactional(readOnly = true)
 	public Page<User> findAllPaginated(int pageNumber) {
 		
@@ -33,6 +36,7 @@ public class UserService {
 		return usersPage;
 	}
 	
+	@Override
 	@Transactional(readOnly = true)
 	public User findByUsernameWithAuthorities(String username) {
 		Optional<User> optional = userRepository.findByUsername(username);
@@ -46,6 +50,19 @@ public class UserService {
 		user.setAuthorities(userAuthorities);
 		
 		return user;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void delete(Long userId) {
+		
+		Optional<User> optional = userRepository.findById(userId);
+		
+		if(!optional.isPresent())
+			throw new UserNotFoundException();
+		
+		userRepository.delete(optional.get());
+		
 	}
 
 }

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.online.store.data.entities.User;
-import com.online.store.services.UserService;
+import com.online.store.services.interfaces.IUserService;
 
 @Controller
 @RequestMapping(value = "/users")
 public class UserController {
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	@RequestMapping("")
 	public ModelAndView showUsers(
@@ -43,12 +43,14 @@ public class UserController {
 		return new ModelAndView("user_details", model);
 	}
 	
-	@RequestMapping(value = "")
-	public ModelAndView remove(ModelMap model) {
+	@RequestMapping(value = "/delete")
+	public ModelAndView remove(
+			@RequestParam("user_id") Long userId, 
+			ModelMap model) {
 		
+		userService.delete(userId);
 		
-		
-		return new ModelAndView("", model);
+		return new ModelAndView("redirect:/users?user_deleted=true", model);
 	}
 
 }
