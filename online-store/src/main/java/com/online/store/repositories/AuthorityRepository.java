@@ -13,4 +13,6 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 	@Query("select a from Authority a join a.users u where u.username = :username")
 	Set<Authority> findUserAuthoritiesByUsername(@Param("username") String username);
 
+	Authority findByAuthority(String string);
+
 }

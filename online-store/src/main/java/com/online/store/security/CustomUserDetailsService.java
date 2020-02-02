@@ -1,11 +1,6 @@
 package com.online.store.security;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,19 +18,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 				
 		User user = userService.findByUsernameWithAuthorities(username);
 		
-		String commaSeparateAuthorityList = user.getAuthorities()
-				.stream()
-				.map(authority -> authority.getAuthority())
-				.collect(Collectors.joining(","));
-		
-		List<GrantedAuthority> authorityList = 
-				AuthorityUtils.commaSeparatedStringToAuthorityList(commaSeparateAuthorityList);
-		
 		org.springframework.security.core.userdetails.User userService = 
 				new org.springframework.security.core.userdetails.User(
 						user.getUsername(),
 						user.getPassword(),
-						authorityList
+						UtilSecurity.getAuthorityList(user.getAuthorities())
 					);
 				
 		return userService;

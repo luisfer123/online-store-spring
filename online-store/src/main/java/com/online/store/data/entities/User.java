@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.online.store.data.validate.UniqueUsername;
+
 @Entity
 @Table(name = "Users")
 public class User {
@@ -23,6 +25,7 @@ public class User {
 	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
 	
+	@UniqueUsername(message = "This username already exists!")
 	@Column(name = "username", unique = true, nullable = false)
 	private String username;
 	

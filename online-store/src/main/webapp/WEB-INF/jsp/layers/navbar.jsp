@@ -58,7 +58,7 @@
 						<a class="nav-link" href="<c:url value='/login' />">Login</a>
 					</li>
 					<li class="nav-item">
-						<a href="#" class="nav-link">Register</a>
+						<a href="<c:url value="/users/add" />" class="nav-link">Register</a>
 					</li>
 				</sec:authorize>
 			</ul>

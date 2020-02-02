@@ -1,11 +1,16 @@
 package com.online.store.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,6 +56,30 @@ public class UserController {
 		userService.delete(userId);
 		
 		return new ModelAndView("redirect:/users?user_deleted=true", model);
+	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public ModelAndView goUserRegistration(ModelMap model) {
+		User user = new User();
+		model.addAttribute("user", user);
+		
+		return new ModelAndView("registration_form", model);
+	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public ModelAndView createUser(
+			@Valid @ModelAttribute("user") User newUser, BindingResult result,
+			@RequestParam("confirmPassword") String confirmPassword,
+			ModelMap model) {
+		
+		if(result.hasErrors()) {
+			model.addAttribute("validation_result", result);
+			return new ModelAndView("registration_form", model);
+		}
+				
+		userService.registerNewUser(newUser);
+		
+		return new ModelAndView("redirect:/home?user_registered=true", model);
 	}
 
 }
