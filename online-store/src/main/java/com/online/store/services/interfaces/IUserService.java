@@ -13,5 +13,9 @@ public interface IUserService {
 	void delete(Long userId);
 
 	void registerNewUser(User newUser);
+	
+	User findByUsername(String username);
+
+	User findById(Long id);
 
 }

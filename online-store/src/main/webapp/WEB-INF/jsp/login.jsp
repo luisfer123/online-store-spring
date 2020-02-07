@@ -25,12 +25,12 @@
 		</c:if>
 		<div class="form-group">
 			<label for="username">Username:</label> 
-			<input type="text" name="username" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email">
+			<input type="text" name="username" class="form-control" id="username" placeholder="Enter your username">
 		</div>
 		
 		<div class="form-group">
 			<label for="password">Password:</label> 
-			<input type="password" name="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Enter email">
+			<input type="password" name="password" class="form-control" id="password" placeholder="Enter your password">
 		</div>
 		
 		<sec:csrfInput/>

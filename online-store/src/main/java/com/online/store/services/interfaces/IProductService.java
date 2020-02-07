@@ -12,4 +12,6 @@ public interface IProductService {
 	
 	Page<Product> findAllPaginated(int requestedPage);
 
+	void delete(Long productId);
+
 }

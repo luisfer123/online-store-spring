@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.online.store.data.entities.Product;
 import com.online.store.data.entities.ProductImage;
+import com.online.store.exceptions.ProductNotFoundException;
 import com.online.store.repositories.ProductImageRepository;
 import com.online.store.repositories.ProductRepository;
 import com.online.store.services.interfaces.IProductService;
@@ -55,6 +56,17 @@ public class ProductService implements IProductService {
 				PageRequest.of(requestedPage, 1, Sort.by("name").descending());
 		
 		return productRepository.findAll(pageRequest);
+	}
+	
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		Optional<Product> optional = productRepository.findById(id);
+		
+		if(!optional.isPresent())
+			throw new ProductNotFoundException();
+		
+		productRepository.delete(optional.get());
 	}
 
 }

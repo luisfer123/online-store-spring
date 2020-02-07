@@ -40,7 +40,9 @@ public class Product {
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] mainImage;
 	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+	@OneToMany(
+			mappedBy = "product", 
+			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<ProductImage> images;
 	
 	public String getMainImageAsString() {

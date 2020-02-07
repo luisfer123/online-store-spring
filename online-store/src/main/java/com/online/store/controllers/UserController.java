@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -43,9 +44,27 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}")
-	public ModelAndView userDetails(@PathVariable("id") Long id, ModelMap model) {
+	public ModelAndView userDetails(
+			@PathVariable("id") Long id, 
+			ModelMap model) {
+		
+		User user = userService.findById(id);
+		model.addAttribute("user", user);
 		
 		return new ModelAndView("user_details", model);
+	}
+	
+	@RequestMapping("/my_profile")
+	public ModelAndView goUserProfile(ModelMap model) {
+		
+		org.springframework.security.core.userdetails.User principal = 
+				(org.springframework.security.core.userdetails.User) 
+				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		User user = userService.findByUsername(principal.getUsername());
+		model.addAttribute("user", user);
+		
+		return new ModelAndView("user_profile", model);
 	}
 	
 	@RequestMapping(value = "/delete")

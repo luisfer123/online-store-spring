@@ -26,6 +26,7 @@ import com.online.store.services.interfaces.IUserService;
 @Service
 public class UserService implements IUserService {
 	
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -34,6 +35,17 @@ public class UserService implements IUserService {
 	
 	@Autowired
 	private PasswordEncoder encoder;
+	
+	@Override
+	public User findById(Long id) {
+		
+		Optional<User> user = userRepository.findById(id);
+		
+		if(!user.isPresent())
+			throw new UserNotFoundException();
+		
+		return user.get();
+	}
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -59,6 +71,18 @@ public class UserService implements IUserService {
 		user.setAuthorities(userAuthorities);
 		
 		return user;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public User findByUsername(String username) {
+		
+		Optional<User> user = userRepository.findByUsername(username);
+		
+		if(!user.isPresent())
+			throw new UsernameNotFoundException("User does not exist!");
+		
+		return user.get();
 	}
 
 	@Override
@@ -97,7 +121,6 @@ public class UserService implements IUserService {
 						user.getPassword(),
 						UtilSecurity.getAuthorityList(user.getAuthorities())
 				);
-		
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 		
 	}

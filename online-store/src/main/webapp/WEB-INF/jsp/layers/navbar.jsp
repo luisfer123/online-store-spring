@@ -35,7 +35,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="nav-item active">
-						<a class="nav-link" href="<c:url value='#' />">My profile</a>
+						<a class="nav-link" href="<c:url value='/users/my_profile' />">My profile</a>
 					</li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">

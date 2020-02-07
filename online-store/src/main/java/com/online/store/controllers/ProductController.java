@@ -108,5 +108,15 @@ public class ProductController {
 		
 		return new ModelAndView("/product_details", model);
 	}
+	
+	@RequestMapping(value = "/delete")
+	public ModelAndView delete(
+			@RequestParam("product_id") Long productId, 
+			ModelMap model) {
+		
+		productService.delete(productId);
+		
+		return new ModelAndView("redirect:/products?product_deleted=true", model);
+	}
 
 }
