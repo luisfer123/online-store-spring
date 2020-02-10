@@ -2,13 +2,16 @@ package com.online.store.data.entities;
 
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -47,6 +50,11 @@ public class User {
 			joinColumns = @JoinColumn(name = "users_id"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
 	private Set<Authority> authorities;
+	
+	@Lob
+	@Column(name = "profile_image")
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] profileImage;
 
 	public Long getId() {
 		return id;
@@ -102,6 +110,14 @@ public class User {
 
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public byte[] getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(byte[] profileImage) {
+		this.profileImage = profileImage;
 	}
 
 }

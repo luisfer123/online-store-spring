@@ -1,5 +1,7 @@
 package com.online.store.controllers;
 
+import java.util.Base64;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,8 @@ public class UserController {
 				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		User user = userService.findByUsername(principal.getUsername());
+		model.addAttribute("userProfileImage", 
+				Base64.getEncoder().encodeToString(user.getProfileImage()));
 		model.addAttribute("user", user);
 		
 		return new ModelAndView("user_profile", model);

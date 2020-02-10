@@ -1,18 +1,18 @@
 package com.online.store.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.online.store.data.entities.User;
 import com.online.store.repositories.UserRepository;
+import com.online.store.security.UtilSecurity;
+import com.online.store.services.interfaces.IUpdateUserProfileService;
 import com.online.store.services.interfaces.IUserService;
 
 @Service
 @Transactional
-public class UpdateUserProfileService {
+public class UpdateUserProfileService implements IUpdateUserProfileService {
 	
 	@Autowired
 	private IUserService userService;
@@ -20,19 +20,39 @@ public class UpdateUserProfileService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public void updateFirstName(String newFirstName) {
+	@Override
+	public void updateUserStringFields(String newFieldValue, String fieldToUpdate) {
 		
-		Object principal = 
-				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username;
+		User user = userService.findByUsername(
+				UtilSecurity.getPrincipalUsername());
 		
-		if(principal instanceof UserDetails)
-			username = ((UserDetails) principal).getUsername();
-		else
-			username = principal.toString();
+		switch(fieldToUpdate) {
+			case "first_name":
+				user.setFirstName(newFieldValue);
+				break;
+			case "last_name":
+				user.setLastName(newFieldValue);
+				break;
+			case "email":
+				user.setEmail(newFieldValue);
+				break;
+		}
 		
-		User user = userService.findByUsername(username);
-		user.setFirstName(newFirstName);
+		userRepository.save(user);
+	}
+	
+	@Override
+	public void updateUserPassword(String newPassword) {
+		
+	}
+	
+	@Override
+	public void updateUserProfileImage(byte[] newImage) {
+		User user = userService.findByUsername(
+				UtilSecurity.getPrincipalUsername());
+		
+		user.setProfileImage(newImage);
+		
 		userRepository.save(user);
 	}
 
