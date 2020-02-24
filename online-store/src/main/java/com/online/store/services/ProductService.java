@@ -52,8 +52,10 @@ public class ProductService implements IProductService {
 	@Transactional(readOnly = true)
 	public Page<Product> findAllPaginated(int requestedPage) {
 		
+		int pageSize = 9;
+		
 		PageRequest pageRequest =
-				PageRequest.of(requestedPage, 1, Sort.by("name").descending());
+				PageRequest.of(requestedPage, pageSize, Sort.by("name").descending());
 		
 		return productRepository.findAll(pageRequest);
 	}

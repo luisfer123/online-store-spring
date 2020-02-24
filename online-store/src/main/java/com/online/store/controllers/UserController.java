@@ -64,8 +64,14 @@ public class UserController {
 				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		User user = userService.findByUsername(principal.getUsername());
-		model.addAttribute("userProfileImage", 
-				Base64.getEncoder().encodeToString(user.getProfileImage()));
+		if(user.getProfileImage() != null) {
+			model.addAttribute("userProfileImage", 
+					Base64.getEncoder().encodeToString(user.getProfileImage()));
+		}
+		/** 
+		 * TODO Add a default image to be loaded when the current logged user does 
+		 * not have a profile image in the database.
+		 */
 		model.addAttribute("user", user);
 		
 		return new ModelAndView("user_profile", model);

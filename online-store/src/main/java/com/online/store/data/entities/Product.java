@@ -3,11 +3,9 @@ package com.online.store.data.entities;
 import java.util.Base64;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,13 +35,15 @@ public class Product {
 	
 	@Column(name = "main_image")
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
 	private byte[] mainImage;
 	
 	@OneToMany(
 			mappedBy = "product", 
 			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<ProductImage> images;
+	
+	@OneToMany(mappedBy = "product")
+	private Set<ProductItem> productItems;
 	
 	public String getMainImageAsString() {
 		 return Base64.getEncoder().encodeToString(this.mainImage);
@@ -95,6 +95,14 @@ public class Product {
 
 	public void setMainImage(byte[] mainImage) {
 		this.mainImage = mainImage;
+	}
+
+	public Set<ProductItem> getProductItems() {
+		return productItems;
+	}
+
+	public void setProductItems(Set<ProductItem> productItems) {
+		this.productItems = productItems;
 	}
 	
 }

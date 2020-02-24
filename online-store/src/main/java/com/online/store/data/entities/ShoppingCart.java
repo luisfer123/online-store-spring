@@ -1,7 +1,6 @@
 package com.online.store.data.entities;
 
 import java.sql.Timestamp;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,30 +8,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "orders")
-public class Order {
+@Table(name = "Shopping_cart")
+public class ShoppingCart {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
 	
-	@Column(name = "purchase_date")
-	private Timestamp purchaseDate;
+	@Column(name = "last_modified")
+	private Timestamp lastModified;
 	
-	@ManyToOne
-	@JoinColumn(name = "User_id")
+	@OneToOne
+	@JoinColumn(name = "users_id")
 	private User user;
-	
-	@OneToMany(mappedBy = "order")
-	private Set<OrderProductItemDetails> itemDetails;
 
 	public Long getId() {
 		return id;
@@ -42,12 +37,12 @@ public class Order {
 		this.id = id;
 	}
 
-	public Timestamp getPurchaseDate() {
-		return purchaseDate;
+	public Timestamp getLastModified() {
+		return lastModified;
 	}
 
-	public void setPurchaseDate(Timestamp purchaseDate) {
-		this.purchaseDate = purchaseDate;
+	public void setLastModified(Timestamp lastModified) {
+		this.lastModified = lastModified;
 	}
 
 	public User getUser() {
@@ -56,14 +51,6 @@ public class Order {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Set<OrderProductItemDetails> getItemDetails() {
-		return itemDetails;
-	}
-
-	public void setItemDetails(Set<OrderProductItemDetails> itemDetails) {
-		this.itemDetails = itemDetails;
 	}
 
 }

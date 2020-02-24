@@ -1,9 +1,11 @@
 package com.online.store.data.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,8 +30,8 @@ public class Authority {
 	private String description;
 	
 	// MappedBy is used in the reverse side of the relationship, the owner side is User.
-	@ManyToMany(mappedBy = "authorities")
-	private Set<User> users;
+	@ManyToMany(mappedBy = "authorities", fetch = FetchType.EAGER)
+	private Set<User> users = new HashSet<>();
 
 	public Long getId() {
 		return id;

@@ -51,7 +51,9 @@ public class UserService implements IUserService {
 	@Transactional(readOnly = true)
 	public Page<User> findAllPaginated(int pageNumber) {
 		
-		PageRequest pageResquested = PageRequest.of(pageNumber, 9);
+		int pageSize = 9;
+		
+		PageRequest pageResquested = PageRequest.of(pageNumber, pageSize);
 		Page<User> usersPage = userRepository.findAll(pageResquested);
 		
 		return usersPage;
@@ -108,7 +110,7 @@ public class UserService implements IUserService {
 		// Assign the corresponding authorities to the new user to
 		// interact with spring security.
 		Set<Authority> authorities = new HashSet<>();
-		authorities.add(authorityRepository.findByAuthority("ROLE_USER"));
+		authorities.add(authorityRepository.findByAuthority("ROLE_USER").get());
 		user.setAuthorities(authorities);
 		
 		// Save the new user in the database

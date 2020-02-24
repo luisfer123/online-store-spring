@@ -2,10 +2,8 @@ package com.online.store.data.entities;
 
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -53,8 +53,14 @@ public class User {
 	
 	@Lob
 	@Column(name = "profile_image")
-	@Basic(fetch = FetchType.LAZY)
+	//@Basic(fetch = FetchType.LAZY)
 	private byte[] profileImage;
+	
+	@OneToOne(mappedBy = "user")
+	private ShoppingCart shoppingCart;
+	
+	@OneToMany(mappedBy = "user")
+	private Set<Order> orders;
 
 	public Long getId() {
 		return id;
@@ -118,6 +124,22 @@ public class User {
 
 	public void setProfileImage(byte[] profileImage) {
 		this.profileImage = profileImage;
+	}
+
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+
+	public Set<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 
 }
