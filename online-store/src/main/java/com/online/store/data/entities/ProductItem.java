@@ -46,6 +46,10 @@ public class ProductItem {
 	@ManyToOne
 	@JoinColumn(name = "products_id")
 	private Product product;
+	
+	@ManyToOne
+	@JoinColumn(name = "Orders_id")
+	private Order order;
 
 	public Long getId() {
 		return id;
@@ -93,6 +97,41 @@ public class ProductItem {
 
 	public void setProductItemId(String productItemId) {
 		ProductItemId = productItemId;
+	}
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		
+		if(!(o instanceof ProductItem))
+			return false;
+		
+		ProductItem other = (ProductItem) o;
+		
+		return other.getId() != null 
+				&& id.equals(other.id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return 333;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductItem [id=" + id + ", ProductItemId=" + ProductItemId 
+				+ ", productionDate=" + productionDate + ", location=" 
+				+ location + ", status=" + status + ", product=" + product 
+				+ ", order=" + order + "]";
 	}
 	
 }

@@ -12,7 +12,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -55,9 +54,6 @@ public class User {
 	@Column(name = "profile_image")
 	//@Basic(fetch = FetchType.LAZY)
 	private byte[] profileImage;
-	
-	@OneToOne(mappedBy = "user")
-	private ShoppingCart shoppingCart;
 	
 	@OneToMany(mappedBy = "user")
 	private Set<Order> orders;
@@ -126,14 +122,6 @@ public class User {
 		this.profileImage = profileImage;
 	}
 
-	public ShoppingCart getShoppingCart() {
-		return shoppingCart;
-	}
-
-	public void setShoppingCart(ShoppingCart shoppingCart) {
-		this.shoppingCart = shoppingCart;
-	}
-
 	public Set<Order> getOrders() {
 		return orders;
 	}
@@ -141,5 +129,32 @@ public class User {
 	public void setOrders(Set<Order> orders) {
 		this.orders = orders;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		
+		if(!(o instanceof User))
+			return false;
+		
+		User other = (User) o;
+		
+		return other.getId() != null 
+				&& id.equals(other.id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return 999;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email 
+				+ ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	
+	
 
 }

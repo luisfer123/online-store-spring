@@ -1,5 +1,6 @@
 package com.online.store.data.entities;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Set;
 
@@ -120,6 +121,33 @@ public class Product {
 
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		
+		if(!(o instanceof Product))
+			return false;
+		
+		Product other = (Product) o;
+		
+		return other.getId() != null 
+				&& id.equals(other.id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return 99;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", description=" 
+				+ description + ", price=" + price + ", mainImage=" 
+				+ Arrays.toString(mainImage) + ", images=" + images 
+				+ ", productItems=" + productItems + ", stock=" + stock + "]";
 	}
 	
 }

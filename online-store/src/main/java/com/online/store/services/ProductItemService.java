@@ -1,14 +1,18 @@
 package com.online.store.services;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.online.store.data.entities.Product;
 import com.online.store.data.entities.ProductItem;
+import com.online.store.data.enums.ProductItemStatus;
 import com.online.store.exceptions.ProductNotFoundException;
 import com.online.store.repositories.ProductItemRepository;
 import com.online.store.repositories.ProductRepository;
@@ -24,9 +28,16 @@ public class ProductItemService {
 	private ProductRepository productRepo;
 	
 	@Transactional(readOnly = true)
-	public Set<ProductItem> findAllPaginatedForProductId(Long productId) {
+	public Page<ProductItem> findAllPaginatedForProductId(
+			Long productId, int pageNumber, int pageSize, String sortBy) {
 		
-		return null;
+		Pageable requestedPage = 
+				PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+		
+		Page<ProductItem> page = 
+				itemRepo.findAllPaginatedForProductId(productId, requestedPage);
+		
+		return page;
 	}
 	
 	@Transactional(readOnly = true)
@@ -42,6 +53,7 @@ public class ProductItemService {
 			throw new ProductNotFoundException();
 		
 		newItem.setProduct(oProduct.get());
+		newItem.setStatus(ProductItemStatus.STOCK);
 		
 		ProductItem item = itemRepo.save(newItem);
 		
