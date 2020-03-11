@@ -37,6 +37,9 @@
 							<h5 class="card-title">Price: ${product.price }</h5>
 							<p class="card-text">${product.description }</p>
 							<a href="<c:url value='/products/${product.id }' />" class="btn btn-primary">Product Details</a>
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
+								<a href="<c:url value="/products/${product.id }/product_items" />" class="btn btn-primary">Manage Stock</a>
+							</sec:authorize>
 						</div>
 					</div>
 				</div>

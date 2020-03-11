@@ -11,21 +11,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.online.store.data.enums.ProductItemStatus;
 
 @Entity
-@Table(name = "Product_items")
+@Table(name = "Product_items",
+		uniqueConstraints = {@UniqueConstraint(columnNames = "product_item_id")})
 public class ProductItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
+	
+	@NotBlank
+	@Column(name = "product_item_id")
+	private String ProductItemId;
 	
 	@Column(name = "production_date")
 	private Date productionDate;
@@ -40,9 +46,6 @@ public class ProductItem {
 	@ManyToOne
 	@JoinColumn(name = "products_id")
 	private Product product;
-	
-	@OneToOne(mappedBy = "productItem")
-	private OrderProductItemDetails orderDetails;
 
 	public Long getId() {
 		return id;
@@ -84,12 +87,12 @@ public class ProductItem {
 		this.product = product;
 	}
 
-	public OrderProductItemDetails getOrderDetails() {
-		return orderDetails;
+	public String getProductItemId() {
+		return ProductItemId;
 	}
 
-	public void setOrderDetails(OrderProductItemDetails orderDetails) {
-		this.orderDetails = orderDetails;
+	public void setProductItemId(String productItemId) {
+		ProductItemId = productItemId;
 	}
 	
 }

@@ -14,6 +14,7 @@ import com.online.store.data.entities.Product;
 import com.online.store.data.entities.ProductImage;
 import com.online.store.exceptions.ProductNotFoundException;
 import com.online.store.repositories.ProductImageRepository;
+import com.online.store.repositories.ProductItemRepository;
 import com.online.store.repositories.ProductRepository;
 import com.online.store.services.interfaces.IProductService;
 
@@ -26,6 +27,12 @@ public class ProductService implements IProductService {
 	
 	@Autowired
 	private ProductImageRepository productImageRepository;
+	
+	@Autowired
+	private ProductItemService productItemService;
+	
+	@Autowired
+	private ProductItemRepository productItemRepo;
 
 	@Override
 	@Transactional(readOnly = false)
@@ -44,6 +51,8 @@ public class ProductService implements IProductService {
 		
 		Set<ProductImage> images = productImageRepository.findByProductId(productId);
 		product.setImages(images);
+		
+		product.setStock(productItemService.getStockForProductId(product.getId()));
 		
 		return product;
 	}
@@ -69,6 +78,26 @@ public class ProductService implements IProductService {
 			throw new ProductNotFoundException();
 		
 		productRepository.delete(optional.get());
+	}
+
+	public Product findByIdWithProductItems(Long productId) {
+		
+		Optional<Product> oProduct = productRepository.findById(productId);
+		if(!oProduct.isPresent())
+			throw new ProductNotFoundException();
+		
+		Product product = oProduct.get();
+		product.setProductItems(
+				productItemRepo.findByProductId(productId));
+		
+		product.setStock(productItemService.getStockForProductId(productId));
+		
+		return product;
+	}
+	
+	@Transactional(readOnly = true)
+	public int productStock(Product product) {
+		return productItemService.getStockForProductId(product.getId());
 	}
 
 }

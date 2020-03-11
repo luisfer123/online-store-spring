@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -44,6 +45,14 @@ public class Product {
 	
 	@OneToMany(mappedBy = "product")
 	private Set<ProductItem> productItems;
+	
+	/**
+	 * Stock is going to be computed when needed. So, this
+	 * field must be set in the service layer whenever it 
+	 * is necessary.
+	 */
+	@Transient
+	private int stock;
 	
 	public String getMainImageAsString() {
 		 return Base64.getEncoder().encodeToString(this.mainImage);
@@ -103,6 +112,14 @@ public class Product {
 
 	public void setProductItems(Set<ProductItem> productItems) {
 		this.productItems = productItems;
+	}
+
+	public int getStock() {
+		return stock;
+	}
+
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 	
 }

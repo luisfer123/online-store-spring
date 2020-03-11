@@ -1,6 +1,7 @@
 package com.online.store.services;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -17,8 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.online.store.data.entities.Authority;
 import com.online.store.data.entities.Product;
+import com.online.store.data.entities.ProductItem;
 import com.online.store.data.entities.User;
+import com.online.store.data.enums.ProductItemStatus;
 import com.online.store.repositories.AuthorityRepository;
+import com.online.store.repositories.ProductItemRepository;
 import com.online.store.repositories.ProductRepository;
 import com.online.store.repositories.UserRepository;
 
@@ -34,6 +38,12 @@ public class OnInitService {
 
 	@Autowired
 	private ProductRepository productRepo;
+	
+	@Autowired
+	private ProductItemRepository productItemRepo;
+
+	@Autowired
+	private ProductService productService;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -47,6 +57,12 @@ public class OnInitService {
 		createAuthorities();
 		createUsers();
 		createProducts();
+		
+		for(Product product: productRepo.findAll()) {
+			product = productService.findByIdWithProductItems(product.getId());
+			if(product.getProductItems().isEmpty())
+				createProductItems(product);
+		}
 
 	}
 
@@ -58,7 +74,7 @@ public class OnInitService {
 			roleAdmin.setAuthority("ROLE_ADMIN");
 			authRepo.save(roleAdmin);
 		}
-		
+
 		Optional<Authority> oUserRole = authRepo.findByAuthority("ROLE_USER");
 		if (!oUserRole.isPresent()) {
 			Authority roleUser = new Authority();
@@ -85,13 +101,12 @@ public class OnInitService {
 			adminAuthorities.add(userAuthority);
 
 			admin.setAuthorities(adminAuthorities);
-			
-			final Resource profileImageResource = 
-					resourceLoader.getResource("classpath:static/pictures/user.png");
+
+			final Resource profileImageResource = resourceLoader.getResource("classpath:static/pictures/user.png");
 			try {
 				byte[] profileImage = IOUtils.toByteArray(profileImageResource.getInputStream());
 				admin.setProfileImage(profileImage);
-			} catch(IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
@@ -109,15 +124,14 @@ public class OnInitService {
 			userAuthority.getUsers().add(user);
 			Set<Authority> userAuthorities = new HashSet<Authority>();
 			userAuthorities.add(userAuthority);
-			
+
 			user.setAuthorities(userAuthorities);
-			
-			final Resource profileImageResource = 
-					resourceLoader.getResource("classpath:static/pictures/user.png");
+
+			final Resource profileImageResource = resourceLoader.getResource("classpath:static/pictures/user.png");
 			try {
 				byte[] profileImage = IOUtils.toByteArray(profileImageResource.getInputStream());
 				user.setProfileImage(profileImage);
-			} catch(IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
@@ -126,14 +140,14 @@ public class OnInitService {
 	}
 
 	public void createProducts() {
-		
+
 		createProduct("t-shirt", "productTShirt.jpg");
 		createProduct("shoes", "productShoes.jpg");
-		for(int i = 0; i < 99; i++) {
-			createProduct("product-"+i, "genericProduct.jpg");
+		for (int i = 0; i < 99; i++) {
+			createProduct("product-" + i, "genericProduct.jpg");
 		}
 	}
-	
+
 	public void createProduct(String name, String imageName) {
 		Optional<Product> oShoes = productRepo.findByName(name);
 		if (!oShoes.isPresent()) {
@@ -141,8 +155,7 @@ public class OnInitService {
 			Product shoes = new Product();
 			shoes.setName(name);
 
-			final Resource imageResource = 
-					resourceLoader.getResource("classpath:static/pictures/" + imageName);
+			final Resource imageResource = resourceLoader.getResource("classpath:static/pictures/" + imageName);
 			try {
 				shoes.setMainImage(IOUtils.toByteArray(imageResource.getInputStream()));
 			} catch (IOException e) {
@@ -151,6 +164,30 @@ public class OnInitService {
 
 			productRepo.save(shoes);
 		}
+	}
+
+	public void createProductItems(Product product) {
+
+		Set<ProductItem> items = new HashSet<>();
+		for (int i = 0; i < 9; i++) {
+			ProductItem item = createProductItem("asfljkoaisdjf", "someLocation", ProductItemStatus.STOCK);
+			item.setProduct(product);
+			items.add(item);
+			productItemRepo.save(item);
+
+		}
+
+	}
+
+	public ProductItem createProductItem(String itemId, String location, ProductItemStatus status) {
+				
+		ProductItem item = new ProductItem();
+		item.setProductItemId(itemId);
+		item.setLocation(location);
+		item.setStatus(status);
+		item.setProductionDate(new Date(System.currentTimeMillis()));
+
+		return item;
 	}
 
 }

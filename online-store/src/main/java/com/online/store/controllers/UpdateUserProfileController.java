@@ -51,9 +51,7 @@ public class UpdateUserProfileController {
 	public ModelAndView updateUserProfileImage(
 			@RequestParam(value = "new_profile_image", required = true) CommonsMultipartFile newProfileImage,
 			ModelMap model) {
-		
-		System.out.println("controller executed!");
-		
+				
 		if(newProfileImage != null && !newProfileImage.isEmpty()) {
 			updateService.updateUserProfileImage(newProfileImage.getBytes());
 		}

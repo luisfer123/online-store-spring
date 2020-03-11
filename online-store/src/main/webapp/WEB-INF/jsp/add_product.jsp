@@ -27,7 +27,7 @@
 
 			// Put file's name in the image's input label when a image is selected in the form.
 			$('.custom-file-input').on('change', function() { 
-			   let fileName = $(this).val().split('\\').pop(); 
+			   let fileName = $(this).val().split('\\').pop();
 			   $(this).next('.custom-file-label').addClass("selected").html(fileName); 
 			});
 		});
