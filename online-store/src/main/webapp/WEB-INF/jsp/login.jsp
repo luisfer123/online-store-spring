@@ -11,12 +11,22 @@
 	<title>Login</title>
 	
 	<%@ include file="./layers/scripts.jsp"%>
+	
+	<style type="text/css">
+		div.login {
+			height: 600px;
+			max-height: 600px;
+			width: 600px;
+			max-width: 400px;
+			border: thin;
+		}
+	</style>
 </head>
 <body>
 
 <%@ include file="./layers/navbar.jsp" %>
 
-<div class="container mt-3">
+<div class="container mt-3 login">
 	<form method="post" action="<c:url value='/login' />">
 		<c:if test="${param.error eq true }">
 			<div class="alert alert-danger" role="alert">

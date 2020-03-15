@@ -15,5 +15,7 @@ public interface IProductService {
 	void delete(Long productId);
 	
 	Product findByIdWithProductItems(Long productId);
+	
+	Product findById(Long id);
 
 }

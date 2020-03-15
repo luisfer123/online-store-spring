@@ -7,16 +7,20 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.online.store.data.entities.Authority;
+import com.online.store.data.entities.User;
 
 public class UtilSecurity {
 	
 	public static String getPrincipalUsername() {
+		
 		Object principal =
-				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				SecurityContextHolder
+				.getContext()
+				.getAuthentication()
+				.getPrincipal();
 		
 		String principalUsername;
 		
@@ -28,11 +32,8 @@ public class UtilSecurity {
 		return principalUsername;
 	}
 	
-	public static User buildUserDetails(com.online.store.data.entities.User user) {
-		return new User(
-				user.getUsername(),
-				user.getPassword(),
-				getAuthorityList(user.getAuthorities()));
+	public static CustomUserDetails buildUserDetails(User user) {
+		return CustomUserDetails.build(user);
 	}
 	
 	public static List<GrantedAuthority> getAuthorityList(Set<Authority> authorities) {
@@ -40,7 +41,7 @@ public class UtilSecurity {
 				.stream()
 				.map(authority -> authority.getAuthority())
 				.collect(Collectors.joining(","));
-		
+				
 		return AuthorityUtils.commaSeparatedStringToAuthorityList(stringAuthorities);
 	}
 

@@ -12,6 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -57,6 +58,9 @@ public class User {
 	
 	@OneToMany(mappedBy = "user")
 	private Set<Order> orders;
+	
+	@OneToOne(mappedBy = "user")
+	private ShoppingCart shoppingCart;
 
 	public Long getId() {
 		return id;
@@ -130,6 +134,14 @@ public class User {
 		this.orders = orders;
 	}
 	
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if(o == this)
@@ -141,6 +153,7 @@ public class User {
 		User other = (User) o;
 		
 		return other.getId() != null 
+				&& id != null
 				&& id.equals(other.id);
 	}
 	

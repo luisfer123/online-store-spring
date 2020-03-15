@@ -7,10 +7,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -44,8 +46,11 @@ public class Product {
 			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<ProductImage> images;
 	
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
 	private Set<ProductItem> productItems;
+	
+	@ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
+	private Set<ShoppingCart> cartsOn;
 	
 	/**
 	 * Stock is going to be computed when needed. So, this
@@ -133,7 +138,8 @@ public class Product {
 		
 		Product other = (Product) o;
 		
-		return other.getId() != null 
+		return other.getId() != null
+				&& id != null
 				&& id.equals(other.id);
 	}
 	

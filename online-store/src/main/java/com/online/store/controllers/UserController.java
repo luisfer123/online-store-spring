@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.online.store.data.entities.User;
+import com.online.store.security.CustomUserDetails;
 import com.online.store.services.interfaces.IUserService;
 
 @Controller
@@ -29,11 +30,13 @@ public class UserController {
 	
 	@RequestMapping("")
 	public ModelAndView showUsers(
-			@RequestParam(value = "page_number", required = false) Integer pageNumber,
+			@RequestParam(value = "page_number", defaultValue = "0") int pageNumber,
+			@RequestParam(defaultValue = "9") int pageSize,
+			@RequestParam(defaultValue = "id") String sortBy,
 			ModelMap model) {
 		
-		int requestedPage = pageNumber == null ? 0 : pageNumber;
-		Page<User> usersPage = userService.findAllPaginated(requestedPage);
+		Page<User> usersPage = 
+				userService.findAllPaginated(pageNumber, pageSize, sortBy);
 		
 		if(!usersPage.hasContent())
 			return new ModelAndView("/");
@@ -59,9 +62,11 @@ public class UserController {
 	@RequestMapping("/my_profile")
 	public ModelAndView goUserProfile(ModelMap model) {
 		
-		org.springframework.security.core.userdetails.User principal = 
-				(org.springframework.security.core.userdetails.User) 
-				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails principal = 
+				(CustomUserDetails) SecurityContextHolder
+					.getContext()
+					.getAuthentication()
+					.getPrincipal();
 		
 		User user = userService.findByUsername(principal.getUsername());
 		if(user.getProfileImage() != null) {

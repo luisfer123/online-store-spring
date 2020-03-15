@@ -47,6 +47,7 @@
 							<h5 class="card-title">Price: ${product.price }</h5>
 							<p class="card-text">${product.description }</p>
 							<p><strong>${product.stock } items in stock</strong></p>
+							<a href="<c:url value='/cart/${product.id }/add' />" class="btn btn-primary">Add to Cart</a>
 							<sec:authorize access="hasRole('ROLE_ADMIN')">
 								<a href="<c:url value='/products/${product.id }/product_items' />" class="btn btn-secondary">Manage product stock</a>
 							</sec:authorize>

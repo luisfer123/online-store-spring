@@ -76,7 +76,8 @@ public class Order {
 		
 		Order other = (Order) o;
 		
-		return other.getId() != null 
+		return other.getId() != null
+				&& id != null
 				&& id.equals(other.id);
 	}
 	

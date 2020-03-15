@@ -35,16 +35,16 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="nav-item active">
-						<a class="nav-link" href="<c:url value='/users/my_profile' />">My profile</a>
-					</li>
-				</sec:authorize>
-				<sec:authorize access="isAuthenticated()">
-					<li class="nav-item active">
-						<a class="nav-link" href="<c:url value='#' />">Shopping cart</a>
+						<a class="nav-link" href="<c:url value='/cart' />">Shopping cart</a>
 					</li>
 				</sec:authorize>
 			</ul>
 			<ul class="navbar-nav ml-auto">
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item active">
+						<a class="nav-link" href="<c:url value='/users/my_profile' />">My profile</a>
+					</li>
+				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="nav-item">
 						<a class="nav-link" id="logout-link" href="#">Logout</a>

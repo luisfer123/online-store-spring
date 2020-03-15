@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import com.online.store.data.entities.User;
 import com.online.store.exceptions.UserNotFoundException;
 import com.online.store.repositories.AuthorityRepository;
 import com.online.store.repositories.UserRepository;
+import com.online.store.security.CustomUserDetails;
 import com.online.store.security.UtilSecurity;
 import com.online.store.services.interfaces.IUserService;
 
@@ -49,11 +51,10 @@ public class UserService implements IUserService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public Page<User> findAllPaginated(int pageNumber) {
-		
-		int pageSize = 9;
-		
-		PageRequest pageResquested = PageRequest.of(pageNumber, pageSize);
+	public Page<User> findAllPaginated(int pageNumber, int pageSize, String sortBy) {
+				
+		PageRequest pageResquested = 
+				PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
 		Page<User> usersPage = userRepository.findAll(pageResquested);
 		
 		return usersPage;
@@ -61,7 +62,7 @@ public class UserService implements IUserService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public User findByUsernameWithAuthorities(String username) {
+	public User findByUsernameWithAuthorities(String username) throws UsernameNotFoundException {
 		Optional<User> optional = userRepository.findByUsername(username);
 		
 		if(!optional.isPresent())
@@ -69,7 +70,8 @@ public class UserService implements IUserService {
 		
 		User user = optional.get();
 		
-		Set<Authority> userAuthorities = authorityRepository.findUserAuthoritiesByUsername(username);
+		Set<Authority> userAuthorities = 
+				authorityRepository.findUserAuthoritiesByUsername(username);
 		user.setAuthorities(userAuthorities);
 		
 		return user;
@@ -119,12 +121,18 @@ public class UserService implements IUserService {
 		// Programmatically authenticate new user in spring security once it is created.
 		Authentication authenticationToken = 
 				new UsernamePasswordAuthenticationToken(
-						UtilSecurity.buildUserDetails(user),
+						CustomUserDetails.build(user),
 						user.getPassword(),
 						UtilSecurity.getAuthorityList(user.getAuthorities())
 				);
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 		
+	}
+	
+	@Override
+	@Transactional
+	public void save(User user) {
+		userRepository.save(user);
 	}
 
 }

@@ -117,7 +117,8 @@ public class ProductItem {
 		
 		ProductItem other = (ProductItem) o;
 		
-		return other.getId() != null 
+		return other.getId() != null
+				&& id != null
 				&& id.equals(other.id);
 	}
 	

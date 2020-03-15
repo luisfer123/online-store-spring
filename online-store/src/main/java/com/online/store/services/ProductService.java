@@ -99,5 +99,16 @@ public class ProductService implements IProductService {
 	public int productStock(Product product) {
 		return productItemService.getStockForProductId(product.getId());
 	}
+	
+	@Override
+	public Product findById(Long id) {
+		Optional<Product> oProduct = 
+				productRepository.findById(id);
+		
+		if(!oProduct.isPresent())
+			throw new ProductNotFoundException();
+		
+		return oProduct.get();
+	}
 
 }
